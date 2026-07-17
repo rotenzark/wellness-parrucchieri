@@ -80,8 +80,12 @@
 
   /* ---------- counter helper (rispetta la lingua per il separatore) ---------- */
   function formatNum(v, decimals) {
-    if (decimals > 0) return v.toFixed(decimals).replace('.', root.lang === 'en' ? '.' : ',');
-    return Math.round(v).toLocaleString(root.lang === 'en' ? 'en-US' : 'it-IT');
+    var en = root.lang === 'en';
+    if (decimals > 0) return v.toFixed(decimals).replace('.', en ? '.' : ',');
+    // raggruppamento migliaia manuale (toLocaleString non è affidabile in headless):
+    // punto per IT, virgola per EN
+    var s = String(Math.round(v));
+    return s.replace(/\B(?=(\d{3})+(?!\d))/g, en ? ',' : '.');
   }
   // salva i valori finali dal DOM (già scritti: il contenuto non dipende dall'anim)
   var counters = [].slice.call(document.querySelectorAll('[data-count]')).map(function (el) {
