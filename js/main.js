@@ -105,7 +105,7 @@
     // il watchdog forza i numeri al valore finale (mai vuoti/a zero)
     counters.forEach(function (c) { c.el.textContent = formatNum(c.to, c.dec); });
   }
-  setTimeout(showAllReveals, 1500);
+  setTimeout(function () { if (!hasGsap || reducedMotion) showAllReveals(); }, 1500);
 
   if (hasGsap && !reducedMotion) {
     gsap.utils.toArray('.reveal').forEach(function (el) {
